@@ -1,8 +1,9 @@
 # Relatório técnico
 
-A aplicação foi feita em Java utilizando o framework Spring.
+A aplicação foi feita em Java utilizando o framework Spring, que é o principal frame do universo da JVM hoje, 
+responsável por facilitar a criaçao de aplicaçoes stand alone.
 
-Decidi usar o lombok pra diminuir a quantidade de código escrito.
+Decidi usar o lombok, que é uma lib que se conecta a IDE pra diminuir a quantidade de código escrito.
 
 Para validação dos dados foi utilizado as anotações do jakarta.
 
