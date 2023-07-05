@@ -1,21 +1,19 @@
-package com.br.enderecos.service;
+package com.br.gerenciamento.service;
 
-import com.br.enderecos.dominio.Endereco;
-import com.br.enderecos.form.EnderecoForm;
-import com.br.enderecos.repository.EnderecoRepository;
-import com.br.enderecos.view.EnderecoView;
+import com.br.gerenciamento.dominio.Endereco;
+import com.br.gerenciamento.form.EnderecoForm;
+import com.br.gerenciamento.repository.EnderecoRepository;
+import com.br.gerenciamento.view.EnderecoView;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class EnderecoService {
 
-    EnderecoRepository enderecoRepository;
+    private EnderecoRepository enderecoRepository;
 
     public EnderecoView adicionarNovoEndereco(EnderecoForm enderecoForm) {
 

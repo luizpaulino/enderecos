@@ -1,10 +1,10 @@
-package com.br.enderecos;
+package com.br.gerenciamento;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class EnderecosApplicationTests {
+class GerenciamentoApplicationTests {
 
 	@Test
 	void contextLoads() {

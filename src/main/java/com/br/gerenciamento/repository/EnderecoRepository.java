@@ -1,10 +1,9 @@
-package com.br.enderecos.repository;
+package com.br.gerenciamento.repository;
 
-import com.br.enderecos.dominio.Endereco;
+import com.br.gerenciamento.dominio.Endereco;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 @Repository

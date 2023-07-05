@@ -1,13 +1,13 @@
-package com.br.enderecos;
+package com.br.gerenciamento;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class EnderecosApplication {
+public class GerenciamentoApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(EnderecosApplication.class, args);
+		SpringApplication.run(GerenciamentoApplication.class, args);
 	}
 
 }
