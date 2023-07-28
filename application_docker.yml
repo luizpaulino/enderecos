@@ -1,0 +1,6 @@
+spring:
+  data:
+    mongodb:
+      host: mongo
+      database: monitoramento
+      port: 27017
