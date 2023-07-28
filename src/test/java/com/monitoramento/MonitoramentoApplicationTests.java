@@ -1,10 +1,10 @@
-package com.br.gerenciamento;
+package com.monitoramento;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class GerenciamentoApplicationTests {
+class MonitoramentoApplicationTests {
 
 	@Test
 	void contextLoads() {

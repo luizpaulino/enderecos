@@ -1,13 +1,13 @@
-package com.br.gerenciamento;
+package com.monitoramento;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class GerenciamentoApplication {
+public class MonitoramentoApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(GerenciamentoApplication.class, args);
+		SpringApplication.run(MonitoramentoApplication.class, args);
 	}
 
 }
