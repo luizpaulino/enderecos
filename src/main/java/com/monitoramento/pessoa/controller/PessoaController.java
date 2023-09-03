@@ -6,6 +6,7 @@ import com.monitoramento.pessoa.service.PessoaService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -23,9 +24,7 @@ public class PessoaController {
     public ResponseEntity<PessoaResponse> adicionarNovaPessoa(@PathVariable String idUsuario,
                                                               @Valid @RequestBody PessoaRequest pessoaRequest) {
 
-        pessoaRequest.setIdUsuario(idUsuario);
-
-        PessoaResponse pessoaResponse = pessoaService.adicionarNovaPessoa(pessoaRequest);
+        PessoaResponse pessoaResponse = pessoaService.adicionarNovaPessoa(pessoaRequest, idUsuario);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(pessoaResponse);
     }
@@ -40,6 +39,16 @@ public class PessoaController {
         Page<PessoaResponse> todasPessoasResponse = pessoaService.filtrarPessoas(idUsuario, nome, sexo, parentesco, pageable);
 
         return ResponseEntity.status(HttpStatus.OK).body(todasPessoasResponse);
+    }
+
+    @PutMapping("/{idPessoa}")
+    public ResponseEntity<PessoaResponse> atualizarPessoa(@PathVariable String idUsuario,
+                                                          @PathVariable String idPessoa,
+                                                          @RequestBody PessoaRequest pessoaRequest) throws ChangeSetPersister.NotFoundException {
+
+        PessoaResponse pessoaResponse = pessoaService.atualizarPessoa(pessoaRequest, idPessoa, idUsuario);
+
+        return ResponseEntity.status(HttpStatus.OK).body(pessoaResponse);
     }
 
 }

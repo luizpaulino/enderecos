@@ -14,8 +14,6 @@ import java.time.LocalDate;
 @Setter
 public class PessoaRequest {
 
-    private String idUsuario;
-
     @JsonProperty
     @NotBlank(message = "nome é um campo obrigatório e não pode estar em branco")
     private String nome;
