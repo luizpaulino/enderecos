@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+
 @RestController
 @RequestMapping("/{idUsuario}/pessoas")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
@@ -26,7 +28,9 @@ public class PessoaController {
 
         PessoaResponse pessoaResponse = pessoaService.adicionarNovaPessoa(pessoaRequest, idUsuario);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(pessoaResponse);
+        URI location = URI.create("/" + idUsuario + "/pessoas/" + pessoaResponse.getId());
+
+        return ResponseEntity.created(location).body(pessoaResponse);
     }
 
     @GetMapping
@@ -48,7 +52,7 @@ public class PessoaController {
 
         PessoaResponse pessoaResponse = pessoaService.atualizarPessoa(pessoaRequest, idPessoa, idUsuario);
 
-        return ResponseEntity.status(HttpStatus.OK).body(pessoaResponse);
+        return ResponseEntity.ok(pessoaResponse);
     }
 
 }
