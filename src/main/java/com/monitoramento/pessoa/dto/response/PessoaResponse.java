@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+
 @Getter
 @Setter
 public class PessoaResponse {
@@ -21,4 +22,5 @@ public class PessoaResponse {
     private String sexo;
     @JsonProperty
     private String parentesco;
+
 }

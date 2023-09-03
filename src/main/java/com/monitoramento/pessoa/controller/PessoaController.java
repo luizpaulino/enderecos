@@ -40,9 +40,9 @@ public class PessoaController {
                                                                        @RequestParam(required = false) String parentesco,
                                                                        Pageable pageable) {
 
-        Page<PessoaResponse> todasPessoasResponse = pessoaService.filtrarPessoas(idUsuario, nome, sexo, parentesco, pageable);
+        Page<PessoaResponse> pessoasFiltradas = pessoaService.filtrarPessoas(idUsuario, nome, sexo, parentesco, pageable);
 
-        return ResponseEntity.status(HttpStatus.OK).body(todasPessoasResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(pessoasFiltradas);
     }
 
     @PutMapping("/{idPessoa}")

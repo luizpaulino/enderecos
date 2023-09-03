@@ -10,9 +10,17 @@ import java.time.LocalDate;
 @Document
 @Getter
 @Setter
-@AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor
 public class Pessoa {
+
+    public Pessoa(String id, String idUsuario, String nome, LocalDate dataNascimento, String sexo, String parentesco) {
+        this.id = id;
+        this.idUsuario = idUsuario;
+        this.nome = nome;
+        this.dataNascimento = dataNascimento;
+        this.sexo = sexo;
+        this.parentesco = parentesco;
+    }
 
     @Id
     private String id;
@@ -22,4 +30,5 @@ public class Pessoa {
     private LocalDate dataNascimento;
     private String sexo;
     private String parentesco;
+    private Boolean vinculada = false;
 }

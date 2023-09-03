@@ -1,6 +1,7 @@
 package com.monitoramento.exceptions;
 
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -31,6 +32,26 @@ public class ArgumentExceptionHandler {
         body.put("campos_invalidos", errors);
 
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+    @ResponseBody
+    @ExceptionHandler(PessoaVinculadaException.class)
+    protected ResponseEntity<Object> vinculoPessoaInvalido(PessoaVinculadaException ex) {
+
+        Map<String, String> body = new HashMap<>();
+
+        body.put("error", "Solicitação de alteração de vinculo da pessoa inválida");
+
+        return ResponseEntity.badRequest().body(body);
+    }
+    @ResponseBody
+    @ExceptionHandler(ChangeSetPersister.NotFoundException.class)
+    protected ResponseEntity<Object> registroNaoEncontrado(ChangeSetPersister.NotFoundException ex) {
+
+        Map<String, String> body = new HashMap<>();
+
+        body.put("error", "Registro não encontrado");
+
+        return ResponseEntity.badRequest().body(body);
     }
 
 }
