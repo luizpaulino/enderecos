@@ -4,7 +4,7 @@ Este sistema tem por finalidade calcular o consumo mensal de energia.
 
 Relatório e decisões técnicas: [Documento técnico](/TECNICO.md)
 
-
+ao
 Para execução da aplicaçao rodar o comando:
 ```
 docker compose -f .\monitoramento.yml up --build
