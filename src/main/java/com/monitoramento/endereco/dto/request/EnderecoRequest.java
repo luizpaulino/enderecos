@@ -10,8 +10,6 @@ import lombok.Setter;
 @Setter
 public class EnderecoRequest {
 
-    private String idUsuario;
-
     @JsonProperty
     @NotBlank(message = "rua é um campo obrigatório e não pode estar em branco")
     private String rua;
