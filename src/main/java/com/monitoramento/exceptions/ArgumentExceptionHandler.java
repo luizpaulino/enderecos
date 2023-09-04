@@ -53,5 +53,15 @@ public class ArgumentExceptionHandler {
 
         return ResponseEntity.badRequest().body(body);
     }
+    @ResponseBody
+    @ExceptionHandler(UsuarioJaExisteException.class)
+    protected ResponseEntity<Object> usuarioJaExiste(UsuarioJaExisteException ex) {
+
+        Map<String, String> body = new HashMap<>();
+
+        body.put("error", "Usuário já registrado");
+
+        return ResponseEntity.badRequest().body(body);
+    }
 
 }

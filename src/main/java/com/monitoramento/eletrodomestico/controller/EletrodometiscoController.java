@@ -3,7 +3,6 @@ package com.monitoramento.eletrodomestico.controller;
 import com.monitoramento.eletrodomestico.dto.request.EletrodomesticoRequest;
 import com.monitoramento.eletrodomestico.dto.response.EletrodomesticoResponse;
 import com.monitoramento.eletrodomestico.service.EletrodomesticoService;
-import com.monitoramento.pessoa.dto.request.PessoaRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +22,8 @@ public class EletrodometiscoController {
 
     @PostMapping
     public ResponseEntity<EletrodomesticoResponse> adicionarNovoEletrodomestico(@PathVariable String idUsuario,
-                                                                                @Valid @RequestBody EletrodomesticoRequest eletrodomesticoRequest) {
-
-        eletrodomesticoRequest.setIdUsuario(idUsuario);
-        EletrodomesticoResponse eletrodomesticoResponse = eletrodomesticoService.adicionarNovoEletrodomestico(eletrodomesticoRequest);
+                                                                                @Valid @RequestBody EletrodomesticoRequest eletrodomesticoRequest) throws ChangeSetPersister.NotFoundException {
+        EletrodomesticoResponse eletrodomesticoResponse = eletrodomesticoService.adicionarNovoEletrodomestico(eletrodomesticoRequest, idUsuario);
         return ResponseEntity.status(HttpStatus.OK).body(eletrodomesticoResponse);
     }
 
@@ -35,7 +32,7 @@ public class EletrodometiscoController {
                                                                                          @RequestParam(required = false) String nome,
                                                                                          @RequestParam(required = false) String modelo,
                                                                                          @RequestParam(required = false) String potencia,
-                                                                                         Pageable pageable) {
+                                                                                         Pageable pageable) throws ChangeSetPersister.NotFoundException {
 
         Page<EletrodomesticoResponse> eletrodomesticosFiltrados = eletrodomesticoService.filtrarEletrodomesticos(idUsuario, nome, modelo, potencia, pageable);
 

@@ -24,7 +24,7 @@ public class EnderecoController {
 
     @PostMapping
     public ResponseEntity<EnderecoResponse> adicionarNovoEndereco(@PathVariable String idUsuario,
-                                                                  @Valid @RequestBody EnderecoRequest enderecoRequest) {
+                                                                  @Valid @RequestBody EnderecoRequest enderecoRequest) throws ChangeSetPersister.NotFoundException {
 
         EnderecoResponse enderecoResponse = enderecoService.adicionarNovoEndereco(enderecoRequest, idUsuario);
 
@@ -38,7 +38,7 @@ public class EnderecoController {
                                                                            @RequestParam(required = false) String bairro,
                                                                            @RequestParam(required = false) String cidade,
                                                                            @RequestParam(required = false) String estado,
-                                                                           Pageable pageable) {
+                                                                           Pageable pageable) throws ChangeSetPersister.NotFoundException {
 
         Page<EnderecoResponse> enderecosFiltadros = enderecoService.filtrarEnderecos(idUsuario, rua, numero, bairro, cidade, estado, pageable);
 

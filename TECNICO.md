@@ -23,9 +23,6 @@ informações na transações de leitura no banco.
 
 O grande desafio desse momento foi a arquitetura de dados, no final eu não fiquei muito feliz com o caminho que a estrutura 
 de dados tomou, mas em visão de MVP, em um momento próximo ficou de forma fácil para ser evoluída.
-O momento em que decidi vincular tudo a um usuário não foi o primeiro momento do projeto, tendo isso em mente acabou atrapalhando
-toda a arquitetura do projeto e acabou que para essa fase do projeto a criação do usuário ainda não foi importada para dentro
-do projeto.
 
 Falando dessa forma facil para evolução, se dá por conta da reestruturação dos pacotes do projeto, pensados que da forma 
 que o projeto vinha evoluindo e crescendo, já visando o futuro e uma possível quebra para microserviços, tomei a decisão

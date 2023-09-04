@@ -4,6 +4,8 @@ import com.monitoramento.eletrodomestico.dto.request.EletrodomesticoRequest;
 import com.monitoramento.eletrodomestico.dto.response.EletrodomesticoResponse;
 import com.monitoramento.eletrodomestico.persistence.entity.Eletrodomestico;
 import com.monitoramento.eletrodomestico.persistence.repository.EletrodomesticoRepository;
+import com.monitoramento.usuario.persistence.entity.Usuario;
+import com.monitoramento.usuario.service.UsuarioService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +21,14 @@ import static com.monitoramento.utils.Validacao.*;
 public class EletrodomesticoService {
 
     private EletrodomesticoRepository eletrodomesticoRepository;
+    private UsuarioService usuarioService;
 
-    public EletrodomesticoResponse adicionarNovoEletrodomestico(EletrodomesticoRequest eletrodomesticoRequest){
+    public EletrodomesticoResponse adicionarNovoEletrodomestico(EletrodomesticoRequest eletrodomesticoRequest, String idUsuario) throws ChangeSetPersister.NotFoundException {
+        Usuario usuario = usuarioService.buscarUsuario(idUsuario);
+
         Eletrodomestico eletrodomestico = toEletrodomestico(eletrodomesticoRequest);
+
+        eletrodomestico.setIdUsuario(usuario.getId());
 
         eletrodomesticoRepository.save(eletrodomestico);
 
@@ -29,25 +36,31 @@ public class EletrodomesticoService {
     }
 
     public Page<EletrodomesticoResponse> filtrarEletrodomesticos(String idUsuario, String nome, String modelo,
-                                                                 String potencia, Pageable pageable) {
+                                                                 String potencia, Pageable pageable) throws ChangeSetPersister.NotFoundException {
+        Usuario usuario = usuarioService.buscarUsuario(idUsuario);
+
         if (nome == null && modelo == null && potencia == null) {
-            return eletrodomesticoRepository.findAllByIdUsuario(idUsuario, pageable)
+            return eletrodomesticoRepository.findAllByIdUsuario(usuario.getId(), pageable)
                     .map(this::toEletrodomesticoResponse);
         }
 
-        return eletrodomesticoRepository.findEletrodomesticosByIdUsuarioAndNomeOrModeloOrPotencia(idUsuario, nome, modelo,
+        return eletrodomesticoRepository.findEletrodomesticosByIdUsuarioAndNomeOrModeloOrPotencia(usuario.getId(), nome, modelo,
                 potencia, pageable).map(this::toEletrodomesticoResponse);
     }
 
     public void removerEletrodomestico(String idEletrodomestico, String idUsuario) throws ChangeSetPersister.NotFoundException {
-        Eletrodomestico eletrodomestico = eletrodomesticoRepository.findEletrodomesticoByIdAndIdUsuario(idEletrodomestico, idUsuario)
+        Usuario usuario = usuarioService.buscarUsuario(idUsuario);
+
+        Eletrodomestico eletrodomestico = eletrodomesticoRepository.findEletrodomesticoByIdAndIdUsuario(idEletrodomestico, usuario.getId())
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
 
         eletrodomesticoRepository.delete(eletrodomestico);
     }
 
     public EletrodomesticoResponse atualizarEletrodomestico(EletrodomesticoRequest eletrodomesticoRequest, String idEletrodomestico, String idUsuario) throws ChangeSetPersister.NotFoundException {
-        Eletrodomestico eletrodomesticoRecuperado = eletrodomesticoRepository.findEletrodomesticoByIdAndIdUsuario(idEletrodomestico, idUsuario)
+        Usuario usuario = usuarioService.buscarUsuario(idUsuario);
+
+        Eletrodomestico eletrodomesticoRecuperado = eletrodomesticoRepository.findEletrodomesticoByIdAndIdUsuario(idEletrodomestico, usuario.getId())
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
 
         Eletrodomestico eletrodomestico = toEletrodomestico(eletrodomesticoRequest);
