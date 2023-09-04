@@ -83,6 +83,13 @@ public class PessoaService {
 
     }
 
+    public void deletarPessoa(String idPessoa, String idUsuario) throws ChangeSetPersister.NotFoundException {
+        Pessoa pessoa = pessoaRepository.findPessoaByIdAndIdUsuario(idPessoa, idUsuario)
+                .orElseThrow(ChangeSetPersister.NotFoundException::new);
+
+        pessoaRepository.delete(pessoa);
+    }
+
     public Pessoa buscaPessoaPorId(String idPessoa, String idUsuario) throws ChangeSetPersister.NotFoundException {
         return pessoaRepository.findPessoaByIdAndIdUsuario(idPessoa, idUsuario)
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
