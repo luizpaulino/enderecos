@@ -39,6 +39,13 @@ public class EletrodomesticoService {
                 potencia, pageable).map(this::toEletrodomesticoResponse);
     }
 
+    public void removerEletrodomestico(String idEletrodomestico, String idUsuario) throws ChangeSetPersister.NotFoundException {
+        Eletrodomestico eletrodomestico = eletrodomesticoRepository.findEletrodomesticoByIdAndIdUsuario(idEletrodomestico, idUsuario)
+                .orElseThrow(ChangeSetPersister.NotFoundException::new);
+
+        eletrodomesticoRepository.delete(eletrodomestico);
+    }
+
     public EletrodomesticoResponse atualizarEletrodomestico(EletrodomesticoRequest eletrodomesticoRequest, String idEletrodomestico, String idUsuario) throws ChangeSetPersister.NotFoundException {
         Eletrodomestico eletrodomesticoRecuperado = eletrodomesticoRepository.findEletrodomesticoByIdAndIdUsuario(idEletrodomestico, idUsuario)
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);

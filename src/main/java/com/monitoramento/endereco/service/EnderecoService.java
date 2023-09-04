@@ -101,6 +101,13 @@ public class EnderecoService {
         return toEnderecoResponse(endereco);
     }
 
+    public void removerEndereco(String idUsuario, String idEndereco) throws ChangeSetPersister.NotFoundException {
+        Endereco endereco = enderecoRepository.findEnderecoByIdUsuario(idEndereco, idUsuario)
+                .orElseThrow(ChangeSetPersister.NotFoundException::new);
+
+        enderecoRepository.delete(endereco);
+    }
+
     private EnderecoResponse toEnderecoResponse(Endereco endereco) {
         ModelMapper modelMapper = new ModelMapper();
 
@@ -116,4 +123,6 @@ public class EnderecoService {
 
         return modelMapper.map(enderecoRequest, Endereco.class);
     }
+
+
 }

@@ -45,10 +45,19 @@ public class EnderecoController {
         return ResponseEntity.status(HttpStatus.OK).body(enderecosFiltadros);
     }
 
+    @DeleteMapping("/{idEndereco}")
+    public ResponseEntity removerEndereco(@PathVariable @Valid String idUsuario,
+                                          @PathVariable String idEndereco) throws ChangeSetPersister.NotFoundException {
+
+        enderecoService.removerEndereco(idUsuario, idEndereco);
+
+        return ResponseEntity.accepted().build();
+    }
+
     @PutMapping("/{idEndereco}")
     public ResponseEntity<EnderecoResponse> atualizarEndereco(@PathVariable String idUsuario,
-                                                            @PathVariable String idEndereco,
-                                                            @RequestBody EnderecoRequest enderecoRequest) throws ChangeSetPersister.NotFoundException {
+                                                              @PathVariable String idEndereco,
+                                                              @RequestBody EnderecoRequest enderecoRequest) throws ChangeSetPersister.NotFoundException {
 
         EnderecoResponse enderecoResponse = enderecoService.atualizarEndereco(enderecoRequest, idEndereco, idUsuario);
 

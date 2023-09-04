@@ -55,4 +55,13 @@ public class PessoaController {
         return ResponseEntity.ok(pessoaResponse);
     }
 
+    @DeleteMapping("/{idPessoa}")
+    public ResponseEntity<PessoaResponse> atualizarPessoa(@PathVariable String idUsuario,
+                                                          @PathVariable String idPessoa) throws ChangeSetPersister.NotFoundException {
+
+        pessoaService.deletarPessoa(idPessoa, idUsuario);
+
+        return ResponseEntity.accepted().build();
+    }
+
 }

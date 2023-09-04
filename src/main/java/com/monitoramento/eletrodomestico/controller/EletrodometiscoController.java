@@ -51,4 +51,13 @@ public class EletrodometiscoController {
 
         return ResponseEntity.ok(eletrodomesticoResponse);
     }
+
+    @DeleteMapping("/{idEletrodomestico}")
+    public ResponseEntity atualizarPessoa(@PathVariable String idUsuario,
+                                          @PathVariable String idEletrodomestico) throws ChangeSetPersister.NotFoundException {
+
+        eletrodomesticoService.removerEletrodomestico(idEletrodomestico, idUsuario);
+
+        return ResponseEntity.accepted().build();
+    }
 }
