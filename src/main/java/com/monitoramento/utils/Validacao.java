@@ -1,5 +1,6 @@
 package com.monitoramento.utils;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Validacao {
@@ -14,5 +15,9 @@ public class Validacao {
 
     public static Boolean dataNaoFoiAlterada(LocalDate dataAtual, LocalDate novaData) {
         return dataAtual.equals(novaData) || novaData == null;
+    }
+
+    public static Boolean valorNaoFoiAlterada(BigDecimal valorAtual, BigDecimal novoValor) {
+        return valorAtual.equals(novoValor) || novoValor == null;
     }
 }

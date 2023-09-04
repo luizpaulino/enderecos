@@ -11,6 +11,9 @@ import java.math.BigDecimal;
 public class EletrodomesticoResponse {
 
     @JsonProperty
+    private String id;
+
+    @JsonProperty
     private String nome;
 
     @JsonProperty
