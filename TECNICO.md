@@ -28,3 +28,7 @@ Falando dessa forma facil para evolução, se dá por conta da reestruturação 
 que o projeto vinha evoluindo e crescendo, já visando o futuro e uma possível quebra para microserviços, tomei a decisão
 de mudar toda a arquitetura do projeto e separar os dominios em pacotes especificos, pra caso nescerrário, apenas criar o 
 novo microserviço e levar o pacote do respectivo dominio pra lá.
+
+Uma decisão tomada por conta de segurança é que quando um registro vai ser adicionado em um dominio, caso a API não encontre
+um dos registros de dependencia ela retorna um erro genérico de registro não encontrado, pra dificultar para tentativas de 
+invasão e coisas assim utilizarem de brute force.
