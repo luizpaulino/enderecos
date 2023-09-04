@@ -1,11 +1,11 @@
 package com.monitoramento.pessoa.service;
 
-import com.monitoramento.endereco.dto.response.EnderecoResponse;
-import com.monitoramento.endereco.service.EnderecoService;
 import com.monitoramento.pessoa.dto.request.PessoaRequest;
 import com.monitoramento.pessoa.dto.response.PessoaResponse;
 import com.monitoramento.pessoa.persistence.entity.Pessoa;
 import com.monitoramento.pessoa.persistence.repository.PessoaRepository;
+import com.monitoramento.usuario.persistence.entity.Usuario;
+import com.monitoramento.usuario.service.UsuarioService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +13,6 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.monitoramento.utils.Validacao.campoNaoFoiAlterado;
 import static com.monitoramento.utils.Validacao.dataNaoFoiAlterada;
@@ -25,12 +22,15 @@ import static com.monitoramento.utils.Validacao.dataNaoFoiAlterada;
 public class PessoaService {
 
     private PessoaRepository pessoaRepository;
+    private UsuarioService usuarioService;
 
-    public PessoaResponse adicionarNovaPessoa(PessoaRequest pessoaRequest, String idUsuario) {
+    public PessoaResponse adicionarNovaPessoa(PessoaRequest pessoaRequest, String idUsuario) throws ChangeSetPersister.NotFoundException {
+
+        Usuario usuario = usuarioService.buscarUsuario(idUsuario);
 
         Pessoa pessoa = toPessoa(pessoaRequest);
 
-        pessoa.setIdUsuario(idUsuario);
+        pessoa.setIdUsuario(usuario.getId());
 
         pessoaRepository.save(pessoa);
 
@@ -38,20 +38,23 @@ public class PessoaService {
 
     }
 
-    public Page<PessoaResponse> filtrarPessoas(String idUsuario, String nome, String sexo, String parentesco, Pageable pageable) {
+    public Page<PessoaResponse> filtrarPessoas(String idUsuario, String nome, String sexo, String parentesco, Pageable pageable) throws ChangeSetPersister.NotFoundException {
+
+        Usuario usuario = usuarioService.buscarUsuario(idUsuario);
 
         if (nome == null && sexo == null && parentesco == null) {
-            return pessoaRepository.findAllByIdUsuario(idUsuario, pageable)
+            return pessoaRepository.findAllByIdUsuario(usuario.getId(), pageable)
                     .map(this::toPessoaResponse);
         }
 
-        return pessoaRepository.findPessoasByIdUsuarioAndNomeOrParentescoOrSexo(idUsuario, nome, parentesco,
+        return pessoaRepository.findPessoasByIdUsuarioAndNomeOrParentescoOrSexo(usuario.getId(), nome, parentesco,
                 sexo, pageable).map(this::toPessoaResponse);
 
     }
 
     public PessoaResponse atualizarPessoa(PessoaRequest pessoaRequest, String idPessoa, String idUsuario) throws ChangeSetPersister.NotFoundException {
-        Pessoa pessoaRecuperada = pessoaRepository.findPessoaByIdAndIdUsuario(idPessoa, idUsuario)
+        Usuario usuario = usuarioService.buscarUsuario(idUsuario);
+        Pessoa pessoaRecuperada = pessoaRepository.findPessoaByIdAndIdUsuario(idPessoa, usuario.getId())
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
 
         Pessoa pessoa = toPessoa(pessoaRequest);
@@ -84,14 +87,30 @@ public class PessoaService {
     }
 
     public void deletarPessoa(String idPessoa, String idUsuario) throws ChangeSetPersister.NotFoundException {
-        Pessoa pessoa = pessoaRepository.findPessoaByIdAndIdUsuario(idPessoa, idUsuario)
+        Usuario usuario = usuarioService.buscarUsuario(idUsuario);
+
+        Pessoa pessoa = pessoaRepository.findPessoaByIdAndIdUsuario(idPessoa, usuario.getId())
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
 
         pessoaRepository.delete(pessoa);
     }
 
+    public void vincularPessoa(String idUsuario, String idPessoa) throws ChangeSetPersister.NotFoundException {
+        Usuario usuario = usuarioService.buscarUsuario(idUsuario);
+
+        Pessoa pessoa = pessoaRepository.findPessoaByIdAndIdUsuario(idPessoa, usuario.getId())
+                .orElseThrow(ChangeSetPersister.NotFoundException::new);
+
+        pessoa.setVinculada(true);
+
+        pessoaRepository.save(pessoa);
+
+    }
+
     public Pessoa buscaPessoaPorId(String idPessoa, String idUsuario) throws ChangeSetPersister.NotFoundException {
-        return pessoaRepository.findPessoaByIdAndIdUsuario(idPessoa, idUsuario)
+        Usuario usuario = usuarioService.buscarUsuario(idUsuario);
+
+        return pessoaRepository.findPessoaByIdAndIdUsuario(idPessoa, usuario.getId())
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
     }
 
@@ -109,15 +128,5 @@ public class PessoaService {
         modelMapper.map(pessoa, PessoaResponse.class);
 
         return modelMapper.map(pessoa, PessoaResponse.class);
-    }
-
-    public void vincularPessoa(String idUsuario, String idPessoa) throws ChangeSetPersister.NotFoundException {
-        Pessoa pessoa = pessoaRepository.findPessoaByIdAndIdUsuario(idPessoa, idUsuario)
-                .orElseThrow(ChangeSetPersister.NotFoundException::new);
-
-        pessoa.setVinculada(true);
-
-        pessoaRepository.save(pessoa);
-
     }
 }

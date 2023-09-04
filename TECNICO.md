@@ -20,3 +20,15 @@ ficaria mais elegante e de forma mais centralizada para provaveis evoluções.
 
 A base de dados escolhida foi o mongoDB por conta da facilidade na modelagem de dados, na performance de consulta das 
 informações na transações de leitura no banco.
+
+O grande desafio desse momento foi a arquitetura de dados, no final eu não fiquei muito feliz com o caminho que a estrutura 
+de dados tomou, mas em visão de MVP, em um momento próximo ficou de forma fácil para ser evoluída.
+
+Falando dessa forma facil para evolução, se dá por conta da reestruturação dos pacotes do projeto, pensados que da forma 
+que o projeto vinha evoluindo e crescendo, já visando o futuro e uma possível quebra para microserviços, tomei a decisão
+de mudar toda a arquitetura do projeto e separar os dominios em pacotes especificos, pra caso nescerrário, apenas criar o 
+novo microserviço e levar o pacote do respectivo dominio pra lá.
+
+Uma decisão tomada por conta de segurança é que quando um registro vai ser adicionado em um dominio, caso a API não encontre
+um dos registros de dependencia ela retorna um erro genérico de registro não encontrado, pra dificultar para tentativas de 
+invasão e coisas assim utilizarem de brute force.

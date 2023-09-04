@@ -24,7 +24,7 @@ public class PessoaController {
 
     @PostMapping
     public ResponseEntity<PessoaResponse> adicionarNovaPessoa(@PathVariable String idUsuario,
-                                                              @Valid @RequestBody PessoaRequest pessoaRequest) {
+                                                              @Valid @RequestBody PessoaRequest pessoaRequest) throws ChangeSetPersister.NotFoundException {
 
         PessoaResponse pessoaResponse = pessoaService.adicionarNovaPessoa(pessoaRequest, idUsuario);
 
@@ -38,7 +38,7 @@ public class PessoaController {
                                                                        @RequestParam(required = false) String nome,
                                                                        @RequestParam(required = false) String sexo,
                                                                        @RequestParam(required = false) String parentesco,
-                                                                       Pageable pageable) {
+                                                                       Pageable pageable) throws ChangeSetPersister.NotFoundException {
 
         Page<PessoaResponse> pessoasFiltradas = pessoaService.filtrarPessoas(idUsuario, nome, sexo, parentesco, pageable);
 

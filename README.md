@@ -4,11 +4,48 @@ Este sistema tem por finalidade calcular o consumo mensal de energia.
 
 Relatório e decisões técnicas: [Documento técnico](/TECNICO.md)
 
-
+ao
 Para execução da aplicaçao rodar o comando:
 ```
 docker compose -f .\monitoramento.yml up --build
 ```
+
+# Usuario [/usuarios]
+
+### Adicionar um novo usuario (Create) [POST]
+
+Recurso utlizado para adicionar um novo endereço para ser gerenciado pela aplicação.
+
++ Atributos (objeto)
+
+    + nome (string, required)
+    + senha (string, required)
+    + usuario (string, required)
+
+
++ Request (application/json)
+
+    + Body
+
+            {
+              "nome": "Luiz Paulino",
+              "senha": "1234Luiz",
+              "usuario": "luiz.paulino",
+            }
+
++ Response 201 (application/json)
+
+    + Body
+
+            {
+              "idUsuario": "64f5200923787143d49340d2",
+              "nome": "Luiz Paulino",
+              "usuario": "luiz.paulino",
+            }
+
+### /usuarios/{idUsuario} [DELETE]
+Recurso utilizado para exclusao de um usuario.
++ Response 202 (application/json)
 
 # Endereços [/{idUsuario}/enderecos]
 

@@ -13,8 +13,6 @@ import java.math.BigDecimal;
 @Setter
 public class EletrodomesticoRequest {
 
-    private String idUsuario;
-
     @JsonProperty
     @NotBlank(message = "nome é um campo obrigatório e não pode estar em branco")
     private String nome;

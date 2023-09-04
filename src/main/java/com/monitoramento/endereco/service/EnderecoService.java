@@ -8,6 +8,8 @@ import com.monitoramento.endereco.persistence.repository.EnderecoRepository;
 import com.monitoramento.exceptions.PessoaVinculadaException;
 import com.monitoramento.pessoa.persistence.entity.Pessoa;
 import com.monitoramento.pessoa.service.PessoaService;
+import com.monitoramento.usuario.persistence.entity.Usuario;
+import com.monitoramento.usuario.service.UsuarioService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +26,12 @@ public class EnderecoService {
 
     private EnderecoRepository enderecoRepository;
     private PessoaService pessoaService;
+    private UsuarioService usuarioService;
 
-    public EnderecoResponse adicionarNovoEndereco(EnderecoRequest enderecoRequest, String idUsuario) {
+    public EnderecoResponse adicionarNovoEndereco(EnderecoRequest enderecoRequest, String idUsuario) throws ChangeSetPersister.NotFoundException {
+        Usuario usuario = usuarioService.buscarUsuario(idUsuario);
         Endereco endereco = toEndereco(enderecoRequest);
-        endereco.setIdUsuario(idUsuario);
+        endereco.setIdUsuario(usuario.getId());
 
         enderecoRepository.save(endereco);
 
@@ -35,19 +39,24 @@ public class EnderecoService {
     }
 
     public Page<EnderecoResponse> filtrarEnderecos(String idUsuario, String rua, String numero, String bairro,
-                                                   String cidade, String estado, Pageable pageable) {
+                                                   String cidade, String estado, Pageable pageable) throws ChangeSetPersister.NotFoundException {
+        Usuario usuario = usuarioService.buscarUsuario(idUsuario);
+
         if (rua == null && numero == null && bairro == null && cidade == null && estado == null) {
-            return enderecoRepository.findAllByIdUsuario(idUsuario, pageable)
+            return enderecoRepository.findAllByIdUsuario(usuario.getId(), pageable)
                     .map(this::toEnderecoResponse);
         }
 
-        return enderecoRepository.findEnderecosByIdUsuarioAndRuaOrNumeroOrBairroOrCidadeOrEstado(idUsuario, rua, numero,
+        return enderecoRepository.findEnderecosByIdUsuarioAndRuaOrNumeroOrBairroOrCidadeOrEstado(usuario.getId(), rua, numero,
                 bairro, cidade, estado, pageable).map(this::toEnderecoResponse);
     }
 
     public EnderecoResponse atualizarEndereco(EnderecoRequest enderecoRequest, String idEndereco, String idUsuario)
             throws ChangeSetPersister.NotFoundException {
-        Endereco enderecoRecuperado = enderecoRepository.findEnderecoByIdUsuario(idEndereco, idUsuario)
+
+        Usuario usuario = usuarioService.buscarUsuario(idUsuario);
+
+        Endereco enderecoRecuperado = enderecoRepository.findEnderecoByIdUsuario(idEndereco, usuario.getId())
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
 
         Endereco endereco = toEndereco(enderecoRequest);
@@ -84,10 +93,12 @@ public class EnderecoService {
     }
 
     public EnderecoResponse vincularPessoaEndereco(VinculoPessoaEnderecoRequest adicionaPessoaRequest, String idEndereco, String idUsuario) throws ChangeSetPersister.NotFoundException, PessoaVinculadaException {
-        Endereco endereco = enderecoRepository.findEnderecoByIdUsuario(idEndereco, idUsuario)
+        Usuario usuario = usuarioService.buscarUsuario(idUsuario);
+
+        Endereco endereco = enderecoRepository.findEnderecoByIdUsuario(idEndereco, usuario.getId())
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
 
-        Pessoa pessoa = pessoaService.buscaPessoaPorId(adicionaPessoaRequest.getIdPessoa(), idUsuario);
+        Pessoa pessoa = pessoaService.buscaPessoaPorId(adicionaPessoaRequest.getIdPessoa(), usuario.getId());
 
         if (pessoa.getVinculada()) {
             throw new PessoaVinculadaException();
@@ -96,13 +107,15 @@ public class EnderecoService {
         endereco.getPessoas().add(pessoa.getId());
 
         enderecoRepository.save(endereco);
-        pessoaService.vincularPessoa(idUsuario, pessoa.getId());
+        pessoaService.vincularPessoa(usuario.getId(), pessoa.getId());
 
         return toEnderecoResponse(endereco);
     }
 
     public void removerEndereco(String idUsuario, String idEndereco) throws ChangeSetPersister.NotFoundException {
-        Endereco endereco = enderecoRepository.findEnderecoByIdUsuario(idEndereco, idUsuario)
+        Usuario usuario = usuarioService.buscarUsuario(idUsuario);
+
+        Endereco endereco = enderecoRepository.findEnderecoByIdUsuario(idEndereco, usuario.getId())
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
 
         enderecoRepository.delete(endereco);
